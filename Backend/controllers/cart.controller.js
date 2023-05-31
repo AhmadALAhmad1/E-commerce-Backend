@@ -5,7 +5,7 @@ const Products = require("../models/products.model.js");
 const getCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
   try {
-    let cart = await Cart.findOne({ userId });
+    let cart = await Cart.findOne({ userId }).populate('productId');
     if (cart && cart.products.length > 0) {
       res.send(cart);
     }
@@ -19,6 +19,24 @@ const getCart = asyncHandler(async (req, res) => {
   }
 })
 
+// const getCart = asyncHandler(async (req, res) => {
+//   const userId = req.params.id;
+//   try {
+//     let cart = await Cart.findOne({ userId }).populate('productId');
+//     if (cart && cart.products.length > 0) {
+//       res.send(cart);
+//     }
+//     else {
+//       res.send(null);
+//     }
+//   }
+//   catch (err) {
+//     console.log(err);
+//     res.status(500).send("Something went wrong");
+//   }
+// })
+
+//CREATE CART
 
 const createCart = asyncHandler(async (req, res) => {
   const userId = req.params.id;
@@ -65,6 +83,30 @@ const createCart = asyncHandler(async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 })
+
+
+// const createCart = asyncHandler(async (req, res) => {
+//   const productId = req.params;
+
+//   try {
+//     console.log(productId)
+//     const product = await Products.find( productId );
+//     if (!product) {
+//       return res.status(404).send('Product not found!');
+//     }
+
+//     const newCart = await Cart.create({
+//       products:  productId,
+//     });
+
+//     return res.status(201).send(newCart);
+//   }
+//   catch (err) {
+//     console.log(err);
+//     return res.status(500).send("Something went wrong");
+//   }
+// });
+
 
 
 const deleteCart = asyncHandler(async (req, res) => {

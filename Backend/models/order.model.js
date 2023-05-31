@@ -6,29 +6,38 @@ const orderSchema = new Schema(
         UserID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true,
+            // required: true,
         },
 
         AddressID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Address",
-            required: true,
+            // required: true,
         },
 
-        products: [
-            {
-                productID: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "Products",
-                    required: true,
-                },
-                quantity: {
-                    type: Number,
-                    required: true,
-                    min: [1, 'Quantity can not be less then 1.']
-                },
-                price: { Number }
-            }],
+        cart: [{
+            product_id: {
+                type: Schema.Types.ObjectId,
+                ref: 'Products'
+            },
+            name: {
+                type: String,
+                // required: true
+            },
+            size: {
+                type: String,
+                // required: true
+            },
+            quantity: {
+                type: Number,
+                // required: true,
+                min: 0
+            },
+            price: {
+                type: Number,
+                // required: true
+            }
+        }],
 
         status: {
             type: String,

@@ -11,7 +11,7 @@ const {
 // const { protect } = require("../middlewares/authMiddleware.js");
 
 
-router.post('/', createOrder)
+router.post('/create', createOrder)
 router.route('/').get(getOrders)
 router.route('/:id').get(getOrderById)
 router.route('/:id').put(updateOrder)

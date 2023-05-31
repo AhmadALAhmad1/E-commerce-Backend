@@ -1,15 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const ProductModel = require("../models/products.model.js");
-const productsModel = require("../models/products.model.js");
-
+const CatID = require("../models/category.model.js");
 
 
 // Create a new product
 const CreateProduct = asyncHandler(async (req, res) => {
     try {
-        const { name, description, price, size, subCatID } = req.body;
+        const { name, description, price, size, CatID } = req.body;
         const product = new ProductModel({
-            name, description, price, size, subCatID,
+            name, description, price, size, CatID,
             image: req.file.path,
 
         });
@@ -23,7 +22,7 @@ const CreateProduct = asyncHandler(async (req, res) => {
 // Get all products
 const GetAllProducts = asyncHandler(async (req, res) => {
     try {
-        const products = await ProductModel.find().populate('subCatID');
+        const products = await ProductModel.find().populate('CatID');
         const productsWithImage = products.map(item => {
             return {
                 _id: item._id,
@@ -32,7 +31,7 @@ const GetAllProducts = asyncHandler(async (req, res) => {
                 price: item.price,
                 size: item.size,
                 image: `${req.protocol}://${req.get('host')}/${item.image}`,
-                subCatID: item.subCatID
+                CatID: item.CatID
             }
         });
         return res.status(200).json({
@@ -56,7 +55,7 @@ const GetProductByID = asyncHandler(async (req, res) => {
     const { id } = req.params;
 
     try {
-        const product = await ProductModel.findById(id).populate('subCatID');
+        const product = await ProductModel.findById(id).populate('CatID');
         if (!product) {
             return res.status(404).json({
                 status: 404,
@@ -74,7 +73,7 @@ const GetProductByID = asyncHandler(async (req, res) => {
                 price: product.price,
                 size: product.size,
                 image: `${req.protocol}://${req.get('host')}/${product.image}`,
-                subCatID: product.subCatID
+                CatID: product.CatID
             },
         });
     } catch (error) {
@@ -108,7 +107,7 @@ const UpdateProduct = asyncHandler(async (req, res) => {
                 price: req.body.price || product.price,
                 size: req.body.size || product.size,
                 image: imageUrl,
-                subCatID: product.subCatID
+                CatID: product.CatID
 
             },
             { new: true }
@@ -122,7 +121,7 @@ const UpdateProduct = asyncHandler(async (req, res) => {
 
 const DeleteProduct = asyncHandler(async (req, res) => {
     try {
-        const product = await ProductModel.findByIdAndDelete(req.params.id).populate('subCatID');
+        const product = await ProductModel.findByIdAndDelete(req.params.id).populate('CatID');
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }

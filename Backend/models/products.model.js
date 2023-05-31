@@ -20,16 +20,18 @@ const products = new mongoose.Schema({
         type: String,
     },
 
-    subCatID: {
+    CatID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "subCategory",
-        required: true,
+        ref: "Category",
     },
 
     image: {
         type: String,
     },
 
+    // quantity: {
+    //     type: String,
+    // },
 
 },
     {

@@ -1,66 +1,82 @@
 const Order = require("../models/order.model.js");
 const Cart = require("../models/cart.model.js");
 const User = require("../models/user.model.js");
+const Product = require("../models/products.model.js");
+const Address = require("../models/address.model.js");
 const asyncHandler = require("express-async-handler");
 
-
-
-//create Order
-// const createOrder = asyncHandler(async (req, res) => {
-//     const { UserID, AddressID, products, total } = req.body;
-
-//     const order = await Order.create({ UserID, AddressID, products, total });
-//     res.status(201).send(order);
-// });
 const createOrder = asyncHandler(async (req, res) => {
     try {
-        const userId = req.params.id;
+        const { cart, total, UserID, AddressID } = req.body;
 
-        // Find the cart and user in the database
-        let cart = await Cart.findOne({ userId });
-        let user = await User.findOne({ _id: userId });
-
-        if (cart) {
-            // Create an order using the cart data
-            const order = await Order.create({
-                UserID: userId,
-                AddressID: user.addressId,
-                products: cart.products,
-                status: "pending",
-                total: cart.total
-            });
-
-            // Delete the cart after successful checkout
-            const data = await Cart.findByIdAndDelete({ _id: cart.id });
-
-            return res.status(201).send(order);
-        } else {
-            res.status(500).send("You do not have items in cart");
+        if (!cart || !Array.isArray(cart) || cart.length === 0) {
+            return res.status(400).json({ error: 'Invalid cart items' });
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Something went wrong");
+
+        const orderItems = cart.map((item) => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            size: item.size,
+            product_id: item.product_id,
+
+        }));
+
+        const order = await Order.create({
+            UserID: UserID,
+            AddressID: AddressID,
+            cart: orderItems,
+            total: total,
+
+        });
+
+        // Retrieve the populated order
+        const orders = await Order.find()
+        .populate('AddressID')
+        .populate('UserID')
+        .exec();
+
+    res.send(orders);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+}
+});
+
+
+
+
+
+const getOrders = asyncHandler(async function (req, res) {
+    try {
+        const orders = await Order.find()
+            .populate('AddressID')
+            .populate('UserID')
+            .exec();
+
+        res.send(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 
 
-
-//get Orders
-const getOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find();
-    res.send(orders);
-});
-
 //get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
     const orderId = req.params.id;
-    const order = await Order.findById(orderId);
+
+    const order = await Order.findById(orderId).lean()
+        .populate('AddressID')
+        .populate('UserID');
+
     if (order) {
         res.send(order);
     } else {
         res.status(404).send("Order not found");
     }
 });
+
 
 
 

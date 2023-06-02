@@ -11,6 +11,6 @@ const {
 
 router.post('/createAddress', createAddress)
 router.route('/').get(getAddresses)
-router.route('/:userId').get(getAddressById).patch(updateAddress).delete(deleteAddress)
+router.route('/:id').get(getAddressById).patch(updateAddress).delete(deleteAddress)
 
 module.exports = router;

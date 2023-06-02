@@ -1,13 +1,8 @@
-const asyncHandler = require("express-async-handler");
-const Address = require("../models/address.model.js");
-// Create new address
-
-
-// Create new address
 const createAddress = asyncHandler(async (req, res) => {
     const { name, phone, email, city, street, building, UserID } = req.body;
   
     const address = await Address.create({
+      UserID: UserID,
       name,
       phone,
       email,
@@ -16,14 +11,15 @@ const createAddress = asyncHandler(async (req, res) => {
       building,
     });
   
-    // Populate the userID field with the corresponding user document
-    await address.populate('UserID');
+    // Query for the newly created address and populate the 'UserID' field with the corresponding user document
+    const populatedAddress = await Address.findById(address._id).populate('UserID').exec();
   
     res.status(201).send({
       message: "Successfully created an address",
-      address,
+      address: populatedAddress,
     });
   });
+  
   
 // Get all addresses
 const getAddresses = asyncHandler(async (req, res) => {

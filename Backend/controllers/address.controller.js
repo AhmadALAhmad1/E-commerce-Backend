@@ -37,21 +37,37 @@ const getAddresses = asyncHandler(async (req, res) => {
 });
 
 // Get single address
+// const getAddressById = asyncHandler(async (req, res) => {
+//     let id = req.params.id;
+//     const address = await Address.findOne({ userID: id });
+
+//     if (address) {
+//         res.status(200).json({
+//             success: true,
+//             data: address,
+//         });
+//     } else {
+//         res.status(404);
+//         throw new Error("Address not found");
+//     }
+// });
+
 const getAddressById = asyncHandler(async (req, res) => {
-    let id = req.params.id;
-    const address = await Address.findOne({ userID: id });
-
+    const userId = req.params.userId;
+    const address = await Address.findOne({ userID: userId });
+  
     if (address) {
-        res.status(200).json({
-            success: true,
-            data: address,
-        });
+      res.status(200).json({
+        success: true,
+        data: address,
+      });
     } else {
-        res.status(404);
-        throw new Error("Address not found");
+      res.status(404);
+      throw new Error("Address not found");
     }
-});
+  });
 
+  
 // Update an address
 const updateAddress = asyncHandler(async (req, res) => {
     let id = req.params.id;

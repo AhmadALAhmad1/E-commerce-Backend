@@ -9,7 +9,6 @@ const createAddress = asyncHandler(async (req, res) => {
     const { userID } = req.params;
   
     const address = await Address.create({
-      userID,
       name,
       phone,
       email,
@@ -19,7 +18,7 @@ const createAddress = asyncHandler(async (req, res) => {
     });
   
     // Populate the userID field with the corresponding user document
-    await address.populate('userID');
+    await address.populate('UserID');
   
     res.status(201).send({
       message: "Successfully created an address",

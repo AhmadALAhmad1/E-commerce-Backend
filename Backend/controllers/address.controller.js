@@ -5,8 +5,7 @@ const Address = require("../models/address.model.js");
 
 // Create new address
 const createAddress = asyncHandler(async (req, res) => {
-    const { name, phone, email, city, street, building } = req.body;
-    const { userID } = req.params;
+    const { name, phone, email, city, street, building, UserID } = req.body;
   
     const address = await Address.create({
       name,

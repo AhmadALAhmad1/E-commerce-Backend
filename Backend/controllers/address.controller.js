@@ -5,31 +5,35 @@ const Address = require("../models/address.model.js");
 
 // Create new address
 const createAddress = asyncHandler(function (req, res) {
-    const { name, phone, email, city, street, building } = req.body;
-    const { UserID } = req.params;
+    try {
+      const { name, phone, email, city, street, building, UserID } = req.body;
   
-    const address = Address.create({
-      UserID,
-      name,
-      phone,
-      email,
-      city,
-      street,
-      building,
-    });
+      const address = Address.create({
+        UserID,
+        name,
+        phone,
+        email,
+        city,
+        street,
+        building,
+      });
   
-    // Populate the userID field with the corresponding user document
-    address.populate('UserID', function (err, populatedAddress) {
-      if (err) {
-        // Handle the error
-        res.status(500).send({ error: 'Failed to populate address with user' });
-      } else {
-        res.status(201).send({
-          message: 'Successfully created an address',
-          address: populatedAddress,
-        });
-      }
-    });
+      // Populate the UserID field with the corresponding user document
+      address.populate('UserID', function (err, populatedAddress) {
+        if (err) {
+          // Handle the error
+          res.status(500).send({ error: 'Failed to populate address with user' });
+        } else {
+          res.status(201).send({
+            message: 'Successfully created an address',
+            address: populatedAddress,
+          });
+        }
+      });
+    } catch (error) {
+      // Handle any other errors
+      res.status(500).send({ error: 'Failed to create an address' });
+    }
   });
   
 

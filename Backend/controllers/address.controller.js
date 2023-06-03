@@ -6,10 +6,10 @@ const Address = require("../models/address.model.js");
 // Create new address
 const createAddress = asyncHandler(function (req, res) {
     const { name, phone, email, city, street, building } = req.body;
-    const { userID } = req.params;
+    const { UserID } = req.params;
   
     const address = Address.create({
-      userID,
+      UserID,
       name,
       phone,
       email,
@@ -19,7 +19,7 @@ const createAddress = asyncHandler(function (req, res) {
     });
   
     // Populate the userID field with the corresponding user document
-    address.populate('userID', function (err, populatedAddress) {
+    address.populate('UserID', function (err, populatedAddress) {
       if (err) {
         // Handle the error
         res.status(500).send({ error: 'Failed to populate address with user' });
@@ -33,7 +33,7 @@ const createAddress = asyncHandler(function (req, res) {
   });
   
 
-  
+
 // Get all addresses
 const getAddresses = asyncHandler(async (req, res) => {
     const addresses = await Address.find();

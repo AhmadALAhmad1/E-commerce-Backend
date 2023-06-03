@@ -64,9 +64,9 @@ const getOrders = asyncHandler(async function (req, res) {
 
 //get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
-    const orderId = req.params.id;
+    const UserID = req.params.id;
 
-    const order = await Order.findById(orderId).lean()
+    const order = await Order.findById(UserID).lean()
         .populate('AddressID')
         .populate('UserID');
 

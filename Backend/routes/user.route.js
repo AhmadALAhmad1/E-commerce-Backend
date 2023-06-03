@@ -15,7 +15,7 @@ router.route('/login').post(loginUser)
 router.route('/logout').post(logoutUser)
 router.route('/delete/:id').delete(deleteUser)
 router.get('/getall', getAll);
-router.get('/me/:id', protect, getMe);
+router.get('/me/:id', getMe);
 
 router.get('/auth/user-role', protect, (req, res) => {
     res.status(200).json({ role: req.user.role });

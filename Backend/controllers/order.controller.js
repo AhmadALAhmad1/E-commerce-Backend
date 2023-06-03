@@ -64,7 +64,8 @@ const getOrders = asyncHandler(async function (req, res) {
 
 //get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
-    const UserID = req.params.id;
+    const {UserID} = req.params;
+try{
 
     const order = await Order.findById(UserID).lean()
         .populate('AddressID')
@@ -72,7 +73,10 @@ const getOrderById = asyncHandler(async (req, res) => {
 
     if (order) {
         res.send(order);
-    } else {
+    } 
+    
+}
+    catch(error) {
         res.status(404).send("Order not found");
     }
 });

@@ -63,10 +63,11 @@ const getOrders = asyncHandler(async function (req, res) {
 
 
 //get order by ID
+// get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
     const UserID = req.params.id;
     try {
-      const order = await Order.find({ 'UserID._id': UserID })
+      const order = await Order.find({ UserID: UserID })
         .populate('AddressID')
         .populate('UserID')
         .lean();
@@ -81,7 +82,6 @@ const getOrderById = asyncHandler(async (req, res) => {
     }
   });
   
-
 
 
 //update order

@@ -63,44 +63,25 @@ const getOrders = asyncHandler(async function (req, res) {
 
 
 //get order by ID
-// get order by ID
-// get order by UserID
 const getOrderById = asyncHandler(async (req, res) => {
-    const { cart, total, UserID, AddressID } = req.body;
+    const { UserID } = req.params;
 
     try {
-        const orderItems = cart.map((item) => ({
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            size: item.size,
-            product_id: item.product_id,
-
-        }));
-
-        const order = await Order.findById({
-            UserID: UserID,
-            AddressID: AddressID,
-            cart: orderItems,
-            total: total,
-
-        });
-
-        // Retrieve the populated order
-        const orders = await Order.find()
+        const orders = await Order.find({ UserID: UserID })
             .populate('AddressID')
             .populate('UserID')
-            .exec();
+            .lean();
 
-        res.send(orders);
+        if (orders.length > 0) {
+            res.send(orders);
+        } else {
+            res.status(404).send("Orders not found");
+        }
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Server error' });
     }
 });
-
-
-
 
 
 

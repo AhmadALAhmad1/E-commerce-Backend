@@ -32,15 +32,15 @@ const createOrder = asyncHandler(async (req, res) => {
 
         // Retrieve the populated order
         const orders = await Order.find()
-            .populate('AddressID')
-            .populate('UserID')
-            .exec();
+        .populate('AddressID')
+        .populate('UserID')
+        .exec();
 
-        res.send(orders);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
-    }
+    res.send(orders);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+}
 });
 
 
@@ -64,22 +64,20 @@ const getOrders = asyncHandler(async function (req, res) {
 
 //get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
-    const { UserID } = req.params;
+    const {UserID} = req.params;
+try{
 
-    try {
-        const orders = await Order.find({ UserID: UserID })
-            .populate('AddressID')
-            .populate('UserID')
-            .lean();
+    const order = await Order.findById(UserID).lean()
+        .populate('AddressID')
+        .populate('UserID');
 
-        if (orders.length > 0) {
-            res.send(orders);
-        } else {
-            res.status(404).send("Orders not found");
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
+    if (order) {
+        res.send(order);
+    } 
+    
+}
+    catch(error) {
+        res.status(404).send("Order not found");
     }
 });
 

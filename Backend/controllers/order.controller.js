@@ -64,24 +64,25 @@ const getOrders = asyncHandler(async function (req, res) {
 
 //get order by ID
 // get order by ID
+// get order by UserID
 const getOrderById = asyncHandler(async (req, res) => {
     const UserID = req.params.id;
     try {
-      const order = await Order.find({ UserID: UserID })
-        .populate('AddressID')
-        .populate('UserID')
-        .lean();
-  
-      if (order) {
-        res.send(order);
-      } else {
-        res.status(404).send("Order not found");
-      }
+        const orders = await Order.find({ UserID: UserID })
+            .populate('AddressID')
+            .populate('UserID')
+            .lean();
+
+        if (orders.length > 0) {
+            res.send(orders);
+        } else {
+            res.status(404).send("Orders not found");
+        }
     } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+        res.status(500).json({ error: 'Server error' });
     }
-  });
-  
+});
+
 
 
 //update order

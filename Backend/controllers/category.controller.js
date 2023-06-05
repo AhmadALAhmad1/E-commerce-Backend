@@ -16,26 +16,25 @@ const createCat = asyncHandler(async (req, res) => {
 // Get all categories
 const getallCat = asyncHandler(async (req, res) => {
     try {
-      const { id, name } = req.query;
-  
-      let query = {};
-  
-      if (id) {
-        query._id = id;
-      }
-  
-      if (name) {
-        query.name = name;
-      }
-  
-      const categories = await Category.find(query, "name");
-      res.json(categories);
+        const { id, name } = req.query;
+
+        let query = {};
+
+        if (id) {
+            query._id = id;
+        }
+
+        if (name) {
+            query.name = { $regex: name, $options: "i" };
+        }
+
+        const categories = await Category.find(query);
+        res.json(categories);
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Server error' });
+        console.log(error);
+        res.status(500).json({ error: "Server error" });
     }
-  });
-  
+});
 // Get a single category by ID
 const getCat = asyncHandler(async (req, res) => {
     try {
@@ -43,7 +42,7 @@ const getCat = asyncHandler(async (req, res) => {
         if (!category) {
             return res.status(404).json({ error: 'Category not found' });
         }
-        res.json( category );
+        res.json(category);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Server error' });

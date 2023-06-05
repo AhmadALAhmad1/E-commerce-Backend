@@ -99,7 +99,7 @@ const UpdateProduct = asyncHandler(async (req, res) => {
             imageUrl = req.file.path;
         }
 
-        const updatedItem = await productsModel.findByIdAndUpdate(
+        const updatedItem = await ProductModel.findByIdAndUpdate(
             id,
             {
                 name: req.body.name || product.name,
@@ -112,6 +112,8 @@ const UpdateProduct = asyncHandler(async (req, res) => {
             },
             { new: true }
         );
+
+        console.log("updatedItem:", updatedItem); // 
 
         return res.status(200).json({ message: "successfully updated", updatedItem });
     } catch (error) {

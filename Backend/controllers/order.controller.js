@@ -104,22 +104,21 @@ const updateOrder = asyncHandler(async (req, res) => {
     }
 });
 
-//delete order
-const deleteOrder = asyncHandler(async (req, res) => {
+const deleteOrder = async (req, res) => {
     try {
         const orderId = req.params.id;
+        const order = await Order.findByIdAndDelete(orderId);
 
-        const order = await Order.findById(orderId);
         if (order) {
-            await order.remove();
             res.send({ message: "Order deleted" });
         } else {
             res.status(404).send("Order not found");
         }
     } catch (error) {
-        res.status(500).send("Error deleting order");
+        console.log(error);
+        res.status(500).send("Internal Server Error");
     }
-});
+};
 
 
 module.exports = {

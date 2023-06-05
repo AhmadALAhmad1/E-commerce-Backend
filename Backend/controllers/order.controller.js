@@ -106,8 +106,8 @@ const updateOrder = asyncHandler(async (req, res) => {
 
 const deleteOrder = async (req, res) => {
     try {
-        const id = req.params._id;
-        const order = await Order.findByIdAndDelete(orderId);
+        const id = req.params.id;
+        const order = await Order.findByIdAndDelete(id);
 
         if (order) {
             res.send({ message: "Order deleted" });

@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const ProductModel = require("../models/products.model.js");
+const ProductModel = require("../models/products.model");
 const CatID = require("../models/category.model.js");
 
 
@@ -107,7 +107,7 @@ const UpdateProduct = asyncHandler(async (req, res) => {
                 price: req.body.price || product.price,
                 size: req.body.size || product.size,
                 image: imageUrl,
-                CatID: CatID
+                CatID: product.CatID
 
             },
             { new: true }

@@ -16,14 +16,14 @@ const createCat = asyncHandler(async (req, res) => {
 // Get all categories
 const getallCat = asyncHandler(async (req, res) => {
     try {
-        const categories = await Category.find();
-        res.json( categories );
+      const categories = await Category.find({}, "name");
+      res.json(categories);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ error: 'Server error' });
+      console.log(error);
+      res.status(500).json({ error: 'Server error' });
     }
-});
-
+  });
+  
 // Get a single category by ID
 const getCat = asyncHandler(async (req, res) => {
     try {

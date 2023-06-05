@@ -32,15 +32,15 @@ const createOrder = asyncHandler(async (req, res) => {
 
         // Retrieve the populated order
         const orders = await Order.find()
-        .populate('AddressID')
-        .populate('UserID')
-        .exec();
+            .populate('AddressID')
+            .populate('UserID')
+            .exec();
 
-    res.send(orders);
-} catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
-}
+        res.send(orders);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 
@@ -64,19 +64,19 @@ const getOrders = asyncHandler(async function (req, res) {
 
 //get order by ID
 const getOrderById = asyncHandler(async (req, res) => {
-    const {UserID} = req.params;
-try{
+    const { UserID } = req.params;
+    try {
 
-    const order = await Order.findById(UserID).lean()
-        .populate('AddressID')
-        .populate('UserID');
+        const order = await Order.findById(UserID).lean()
+            .populate('AddressID')
+            .populate('UserID');
 
-    if (order) {
-        res.send(order);
-    } 
-    
-}
-    catch(error) {
+        if (order) {
+            res.send(order);
+        }
+
+    }
+    catch (error) {
         res.status(404).send("Order not found");
     }
 });
@@ -106,16 +106,21 @@ const updateOrder = asyncHandler(async (req, res) => {
 
 //delete order
 const deleteOrder = asyncHandler(async (req, res) => {
-    const orderId = req.params.id;
+    try {
+        const orderId = req.params.id;
 
-    const order = await Order.findById(orderId);
-    if (order) {
-        await order.remove();
-        res.send({ message: "Order deleted" });
-    } else {
-        res.status(404).send("Order not found");
+        const order = await Order.findById(orderId);
+        if (order) {
+            await order.remove();
+            res.send({ message: "Order deleted" });
+        } else {
+            res.status(404).send("Order not found");
+        }
+    } catch (error) {
+        res.status(500).send("Error deleting order");
     }
 });
+
 
 module.exports = {
     getOrders,

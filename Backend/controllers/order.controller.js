@@ -104,10 +104,10 @@ const updateOrder = asyncHandler(async (req, res) => {
     }
 });
 
-const deleteOrder = async (req, res) => {
+const deleteOrder = asyncHandler(async (req, res) => {
     try {
-        const id = req.params.id;
-        const order = await Order.findByIdAndDelete(id);
+        const orderId = req.params.id; // Use "id" instead of "_id"
+        const order = await Order.findByIdAndDelete(orderId);
 
         if (order) {
             res.send({ message: "Order deleted" });
@@ -118,8 +118,7 @@ const deleteOrder = async (req, res) => {
         console.log(error);
         res.status(500).send("Internal Server Error");
     }
-};
-
+});
 
 module.exports = {
     getOrders,

@@ -85,41 +85,41 @@ const GetProductByID = asyncHandler(async (req, res) => {
     }
 })
 
-var UpdateProduct = asyncHandler(function (req, res) {
-    var id = req.params.id;
-    ProductModel.findById(id, function (err, product) {
+const UpdateProduct = function(req, res) {
+    const id = req.params.id;
+    ProductModel.findById(id, function(err, product) {
+      if (err) {
+        return res.status(400).json({ message: err.message });
+      }
+      if (!product) {
+        return res.status(404).json({ message: 'product not found' });
+      }
+  
+      let imageUrl = product.image;
+      if (req.file) {
+        imageUrl = req.file.path;
+      }
+  
+      const updatedData = {
+        name: req.body.name || product.name,
+        description: req.body.description || product.description,
+        price: req.body.price || product.price,
+        size: req.body.size || product.size,
+        image: imageUrl,
+        CatID: product.CatID
+      };
+  
+      ProductModel.findByIdAndUpdate(id, updatedData, { new: true }, function(err, updatedItem) {
         if (err) {
-            return res.status(400).json({ message: err.message });
+          return res.status(400).json({ message: err.message });
         }
-        if (!product) {
-            return res.status(404).json({ message: 'product not found' });
-        }
-
-        var imageUrl = product.image;
-        if (req.file) {
-            imageUrl = req.file.path;
-        }
-
-        var updatedData = {
-            name: req.body.name || product.name,
-            description: req.body.description || product.description,
-            price: req.body.price || product.price,
-            size: req.body.size || product.size,
-            image: imageUrl,
-            CatID: product.CatID
-        };
-
-        ProductModel.findByIdAndUpdate(id, updatedData, { new: true }, function (err, updatedItem) {
-            if (err) {
-                return res.status(400).json({ message: err.message });
-            }
-
-            console.log("updatedItem:", updatedItem);
-            return res.status(200).json({ message: "successfully updated", updatedItem });
-        });
+  
+        console.log("updatedItem:", updatedItem);
+        return res.status(200).json({ message: "successfully updated", updatedItem });
+      });
     });
-});
-
+  };
+  
 const DeleteProduct = asyncHandler(async (req, res) => {
     try {
         const product = await ProductModel.findByIdAndDelete(req.params.id).populate('CatID');

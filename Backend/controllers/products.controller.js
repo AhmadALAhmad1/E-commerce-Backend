@@ -107,7 +107,7 @@ const UpdateProduct = asyncHandler(async (req, res) => {
                 price: req.body.price || product.price,
                 size: req.body.size || product.size,
                 image: imageUrl,
-                CatID: product.CatID
+                CatID: CatID
 
             },
             { new: true }
